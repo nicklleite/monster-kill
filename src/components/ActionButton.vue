@@ -1,5 +1,5 @@
 <template>
-    <button :class="[`btn-${btnVariant}`, `btn-${btnSize}`, 'btn', 'd-block']">{{ btnActionText }}</button>
+    <button :class="[`btn-${btnVariant}`, `btn-${btnSize}`, 'btn']">{{ btnActionText }}</button>
 </template>
 
 <script>

@@ -16,7 +16,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import ActionButton from '../components/ActionButton'
+import ActionButton from './ActionButton'
 
 export default {
 	name: "GameControls",
