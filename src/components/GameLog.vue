@@ -2,7 +2,8 @@
 	<div class="game-log-wraper">
 		<p v-for="l in logs" :key="l.id">
 			<span v-if="l.critical" class="log-message-critical">{{l.message}}</span>
-			<span v-else-if="l.monsterHeal" class="log-message-monster-heal">{{l.message}}</span>
+			<span v-else-if="l.monsterHeal" class="log-message-heal">{{l.message}}</span>
+			<span v-else-if="l.healAction" class="log-message-heal">{{l.message}}</span>
 			<span v-else>{{l.message}}</span>
 		</p>
 	</div>
@@ -41,7 +42,7 @@
 				font-weight: bold
 			}
 
-			.log-message-monster-heal {
+			.log-message-heal {
 				color: #28a745;
 				font-weight: bold;
 			}

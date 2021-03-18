@@ -3,7 +3,7 @@
 		<div class="game-controls" v-if="isGameExecuting">
 			<ActionButton btnVariant="danger" btnActionText="Attack" btnSize="sm" :disabled="disabledAttack" @click.prevent="playerAttack" @keyup.delete="playerAttack" />
 			<ActionButton btnVariant="warning" btnActionText="Special Attack" btnSize="sm" :disabled="!specialAttackAvailable" @click.prevent="playerSpecialAttack" />
-			<ActionButton btnVariant="success" btnActionText="Heal" btnSize="sm" @click.prevent="playerHealing" /> | 
+			<ActionButton btnVariant="success" btnActionText="Heal" btnSize="sm" @click.prevent="playerHealing" :disabled="!healAvailable" /> | 
 			<ActionButton btnVariant="primary" btnActionText="Give Up" btnSize="sm" @click="giveUp" />
 			<ActionButton btnVariant="primary" btnActionText="Reset" btnSize="sm" @click.prevent="resetGame" />
 		</div>
@@ -22,7 +22,8 @@ export default {
 	name: "GameControls",
 	props: {
 		isGameExecuting: Boolean,
-		specialAttackAvailable: Boolean
+		specialAttackAvailable: Boolean,
+		healAvailable: Boolean
 	},
 
 	components: {
@@ -59,7 +60,8 @@ export default {
 		},
 
 		playerHealing() {
-
+			// Emmiting the event
+			this.$emit('player-heal')
 		},
 
 		startGame() {

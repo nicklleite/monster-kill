@@ -9,9 +9,11 @@
 			<hr>
 			<GameControls
 				:specialAttackAvailable="specialAttackAvailable"
+				:healAvailable="healAvailable"
 				:isGameExecuting="isGameExecuting"
 				@player-attack="playerAttack"
 				@player-special-attack="playerSpecialAttack"
+				@player-heal="playerHeal"
 				@reset-game="resetGame"
 				@give-up="giveUp"
 				@start-game="startGame" />
@@ -41,6 +43,7 @@ export default {
 			logs: [],
 			isGameExecuting: false,
 			specialAttackAvailable: false,
+			healAvailable: false,
 			lifeIndicatorStylePlayer: 'success',
 			lifeIndicatorStyleMonster: 'success'
 		}
@@ -108,7 +111,7 @@ export default {
 			this.isGameExecuting = true
 		},
 
-		// Attacks
+		// Moves
 		playerAttack() {
 			let criticRoll = this.generateRandomNumber(1, 100)
 			this.lifeIndicatorStyleMonster = this.lifeIndicator(this.monster)
@@ -132,12 +135,12 @@ export default {
 
 			this.generateManaPoints()
 
-			// Enable the special attack
+			// Enable the special attack and heal
 			if (this.player.currentManaPoints == 100) {
 				this.specialAttackAvailable = !this.specialAttackAvailable
+				this.healAvailable = !this.healAvailable
 			}
 
-			console.log("Monster's Current Health: ", this.monster.currentHealthPoints)
 			if (this.monster.currentHealthPoints <= 0) {
 				this.resetGame(false, `${this.getCurrentDate()} - !!!YOU WIN!!!`)
 				this.isGameExecuting = false
@@ -169,7 +172,7 @@ export default {
 				this.player.currentSpecialAttackUses = this.player.currentSpecialAttackUses - 1
 				console.log('Special Attack Count: ', this.player.currentSpecialAttackUses)
 
-				this.specialAttackAvailable = !this.specialAttackAvailable
+				this.renewPlayerButtons()
 				this.player.currentManaPoints = 0
 			} else {
 				this.logAction({
@@ -180,7 +183,33 @@ export default {
 		},
 
 		playerHeal() {
+			let p = this.player
 
+			if (p.currentHealUses > 0 && p.currentHealthPoints < 100) {
+				p.currentHealthPoints += p.healPoints
+
+				p.currentHealUses = p.currentHealUses - 1
+
+				this.renewPlayerButtons()
+				p.currentManaPoints = 0
+
+				this.logAction({
+					id: uuid.v4(),
+					message: `${this.getCurrentDate()} - PLAYER HEALED with ${p.healPoints}\n${p.currentHealUses} LEFT!!`,
+					healAction: true
+				})
+			} else {
+				this.logAction({
+					id: uuid.v4(),
+					message: `${this.getCurrentDate()} - NO HEALS LEFT!!!`,
+					healAction: true
+				})
+			}
+		},
+
+		renewPlayerButtons() {
+			this.specialAttackAvailable = !this.specialAttackAvailable
+			this.healAvailable = !this.healAvailable
 		},
 
 		monsterAttack() {
